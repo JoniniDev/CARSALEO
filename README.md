@@ -1,6 +1,6 @@
 # CARSALEO
 
-React SPA Application "CARSALEO"
+React SPA Application Full-Stack "CARSALEO" (Website for car sales)
 
 Stack of technologies that were used:
 
