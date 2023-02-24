@@ -1,0 +1,34 @@
+
+a {
+  text-decoration: none;
+  outline: none;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  // background: #2d3033;
+  background: #fff;
+  margin: 0;
+}
+
+/* Scroll-bar style*/
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #cc4343 #fff;
+}
+
+*::-webkit-scrollbar {
+  width: 14px;
+}
+
+*::-webkit-scrollbar-track {
+  // background: #2d3033;
+  background: #fff;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #cc4343;
+  border-radius: 8px;
+  border: 3px solid #fff;
+}
