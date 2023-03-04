@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 
-export const DropdownFilter = ({className, data, onValue, validedValue }) => {
+export const DropdownFilter = ({ className, data, onValue, onModificate, validedValue, activity }) => {
     const [value, setValue] = useState()
     const [open, setOpen] = useState(false)
 
@@ -16,11 +16,18 @@ export const DropdownFilter = ({className, data, onValue, validedValue }) => {
         }
     }, [value])
 
+    useEffect(() => {
+        setOpen(false)
+        setValue()
+    }, [activity])
+
     return (
         <ParentDiv className={className}>
             <Select
-                onBlur={() => { onValue(value) }}
-                onChange={event => { setValue(event.target.value) }}
+                onBlur={() => { if (onValue) {
+                    onValue(value)
+                }}}
+                onChange={event => { setValue(event.target.value); if (onModificate) onModificate(event.target.value) }}
                 value={value || ""}>
                 {!open ? <Option value="placeholdernull" key={"placeholdernull"}>Виберіть</Option> : null}
                 {data ? data.map((item, index) => {

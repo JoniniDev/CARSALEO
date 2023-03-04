@@ -42,7 +42,12 @@ export const RightNav = ({ open, isAuth, onRedirect }) => {
                 } : {
                     color: "#fff"
                 }}>Новини</NavLink></li>
-            <li><Profile_Logo_mob /></li>
+            <li>
+                <NavLink onClick={onRedirect} to={isAuthLink} style={({ isActive }) => isActive ? {
+                    color: "#3b3b3b"
+                } : {
+                    color: "#fff"
+                }}><Profile_Logo_mob /></NavLink></li>
         </Ul>
     )
 }

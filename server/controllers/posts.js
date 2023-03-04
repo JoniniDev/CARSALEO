@@ -7,13 +7,13 @@ import { fileURLToPath } from 'url'
 export const createPost = async (req, res) => {
     try {
         const { brand, model, priceUSD, year, city, mileage, description, type, capacity, fuelType, state, color } = req.body
-        const user = await User.findById(req.userId)
+        const User = await User.findById(req.userId)
 
         if (req.files.images && req.files.images <= 25) {
             let allImages = []
             for (let index = 0; index < req.files.images.length; index++) {
                 const image = req.files.images[index]
-                const fileName = Date.now().toString() + image.name
+                const fileName = `${Date.now().toString()}_${image.name}`
                 const _dirname = dirname(fileURLToPath(import.meta.url))
                 image.mv(path.join(_dirname, "..", "uploads", fileName))
                 allImages.push(fileName)

@@ -53,19 +53,24 @@ export const Carousel = ({ data }) => {
     }, [])
     useEffect(() => {
         let x1 = null
+        let y1 = null
         const handleTouchStart = (event) => {
             x1 = event.touches[0].clientX
+            y1 = event.touches[0].clientY
+            console.log(y1)
         }
         const handleTouchMove = (event) => {
             if (!x1) return false
             let x2 = event.touches[0].clientX
             let xDiff = x2 - x1;
-            if (xDiff > 0) {
-                x1 = null
-                hendleLeftArrowClick()
-            } else if (xDiff < 0) {
-                x1 = null
-                hendleRightArrowClick()
+            if (y1 < 550 && y1 > 100) {
+                if (xDiff > 50) {
+                    x1 = null
+                    hendleLeftArrowClick()
+                } else if (xDiff < -50) {
+                    x1 = null
+                    hendleRightArrowClick()
+                }
             }
         }
         window.addEventListener("touchstart", handleTouchStart, false)

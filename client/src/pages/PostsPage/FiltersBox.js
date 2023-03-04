@@ -5,14 +5,43 @@ import { getAllFilters } from '../../services/filter'
 
 export const FiltersBox = () => {
     const [filters, setFilters] = useState()
+    const [selectedBrands, setSelectedBrands] = useState([])
+    const [selectedModelsBrand, setSelectedModelsBrand] = useState([])
+    const [selectedModels, setSelectedModels] = useState([])
+    const [selectedSelectedFuel, setSelectedFuel] = useState([])
+    const [selectedSelectedCarType, setSelectedCarType] = useState([])
+    const [selectedCity, setSelectedCity] = useState([])
+    const [selectedState, setSelectedState] = useState([])
+    const [selectedUserType, setSelectedUserType] = useState([])
+    const [activity, setActivity] = useState({})
 
     useEffect(() => {
         filtersCallBack()
     }, [])
 
+    useEffect(() => {
+        if (filters) {
+            const newModels = []
+            for (let index = 0; index < selectedBrands.length; index++) {
+                const element = selectedBrands[index];
+                const filtredData = filters.brandsAndModels.find(item => item.brand === element)
+                newModels.push(...filtredData.models)
+            }
+            setSelectedModelsBrand(newModels.sort(function (a, b) {
+                if (a < b) {
+                    return -1;
+                }
+                if (a > b) {
+                    return 1;
+                }
+                return 0;
+            }))
+        }
+    }, [selectedBrands])
+
     const filtersCallBack = useCallback(() => {
-        getAllFilters().then((data) => {
-            setFilters(data)
+        getAllFilters().then(({ filters }) => {
+            setFilters(filters)
         })
     })
 
@@ -25,63 +54,124 @@ export const FiltersBox = () => {
         return array
     }
 
+    const onSearch = () => {
+        console.log([selectedBrands, selectedModels, selectedCity, selectedSelectedCarType, selectedSelectedFuel, selectedState, selectedUserType])
+    }
+
+    const onReset = () => {
+        setActivity({})
+    }
+
+    const onChangeData = (method, data) => {
+        method(data.sort(function (a, b) {
+            if (a < b) {
+                return -1;
+            }
+            if (a > b) {
+                return 1;
+            }
+            return 0;
+        }))
+    }
+
     return (
         <FilterBox>
             <CategoryBox>
                 <Filter
-                    type="checkbox" >Бренд</Filter>
-            </CategoryBox>
-            <CategoryBox>
-                <Filter
-                    type="checkbox" inputText="$" min={undefined} max={10000000}>Модель</Filter>
-            </CategoryBox>
-            <CategoryBox>
-                <Filter
-                    type="inputs" inputText="$" max={10000000}>Ціна</Filter>
-            </CategoryBox>
-            <CategoryBox>
-                <Filter
+                    activity={activity}
                     type="checkbox"
-                    data={["Седан", "Універсал", "Хетчбек", "Купе", "Кросовер", "Кабріолет", "Мінівен", "Пікап", "Лімузин", "Ліфтбек", "Родстер", "Фастбек", "Мікровен"]}
-                    limit={3}>Тип</Filter>
+                    onChangeFilter={(data) => { onChangeData(setSelectedBrands, data) }}
+                    data={filters ? filters.brandsAndModels.map(item => item.brand) : null}
+                    >Бренд</Filter>
             </CategoryBox>
             <CategoryBox>
                 <Filter
+                    activity={activity}
+                    type="checkbox"
+                    onChangeFilter={(dataa) => { onChangeData(setSelectedModels, dataa) }}
+                    data={selectedModelsBrand}
+                    >Модель</Filter>
+            </CategoryBox>
+            <CategoryBox>
+                <Filter
+                    activity={activity}
                     type="inputs"
+                    inputText="$"
+                    max={10000000}
+                    >Ціна</Filter>
+            </CategoryBox>
+            <CategoryBox>
+                <Filter
+                    activity={activity}
+                    type="checkbox"
+                    onChangeFilter={(data) => { onChangeData(setSelectedCarType, data) }}
+                    data={filters ? filters.carTypes : null}
+                    limit={3}
+                    >Тип</Filter>
+            </CategoryBox>
+            <CategoryBox>
+                <Filter
+                    activity={activity}
+                    type="inputs"
+                    onChangeFilter={() => { }}
                     inputText="л"
                     min={0.1}
-                    max={10}>Двигун</Filter>
+                    max={10}
+                    >Двигун</Filter>
             </CategoryBox>
             <CategoryBox>
                 <Filter
+                    activity={activity}
                     type="checkbox"
-                    data={["Бензин", "Газ", "Дизель", "Електро"]}>Паливо</Filter>
+                    onChangeFilter={(data) => { onChangeData(setSelectedFuel, data) }}
+                    data={filters ? filters.fuelTypes : null}
+                    >Паливо</Filter>
             </CategoryBox>
             <CategoryBox>
                 <Filter
+                    activity={activity}
                     type="dropdowns"
-                    data={createDates()}>Роки випуску</Filter>
+                    onChangeFilter={() => { }}
+                    data={createDates()}
+                    >Роки випуску</Filter>
             </CategoryBox>
             <CategoryBox>
                 <Filter
+                    activity={activity}
                     type="checkbox"
-                    data={filters ? filters.filters.cities : null}
+                    onChangeFilter={(data) => { onChangeData(setSelectedCity, data) }}
+                    data={filters ? filters.cities : null}
                     limit={6}
-                    >Регіон</Filter>
+                >Місто</Filter>
             </CategoryBox>
             <CategoryBox>
                 <Filter
+                    activity={activity}
                     type="checkbox"
-                    data={["Ідеальний стан", "Сліди використання", "Після ДТП", "На запчастини"]}>Стан</Filter>
+                    onChangeFilter={(data) => { onChangeData(setSelectedCity, data) }}
+                    data={filters ? filters.colors : null}
+                    limit={6}
+                >Колір</Filter>
+            </CategoryBox>
+            <CategoryBox>
+                <Filter
+                    activity={activity}
+                    type="checkbox"
+                    onChangeFilter={(data) => { onChangeData(setSelectedState, data) }}
+                    data={filters ? filters.state : null}
+                >Стан</Filter>
             </CategoryBox>
             <CategoryBox >
                 <Filter
+                    activity={activity}
                     type="checkbox"
-                    data={["Користувач", "Дилер"]}>Тип продавця</Filter>
+                    onChangeFilter={(data) => { onChangeData(setSelectedUserType, data) }}
+                    data={filters ? filters.userTypes : null}
+                >Тип продавця</Filter>
             </CategoryBox>
             <CategoryBox >
-                <Button>Пошук</Button>
-                <Button>Скинути</Button>
+                <Button onClick={onSearch}>Пошук</Button>
+                <Button onClick={onReset}>Скинути</Button>
             </CategoryBox>
         </FilterBox >
     )
@@ -127,11 +217,15 @@ const Button = styled.button`
     transition-property: opacity;
     transition-duration: 200ms;
     color: #cc4343;
+    height: 25px;
     &:hover {
         opacity: 1;
         transition-duration: 300ms;
     }
     &:first-child {
         margin-bottom: 7px;
+    }
+    @media (max-width: 768px) {
+        height: 35px;
     }
 `

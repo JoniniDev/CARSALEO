@@ -14,6 +14,7 @@ import { EditPostPage } from "./pages/EditPostPage/EditPostPage";
 import { MainPage } from "./pages/MainPage/MainPage";
 import { ProfilePage } from './pages/ProfilePage/ProfilePage';
 import { NewsPage } from './pages/NewsPage/NewsPage';
+import { TermsAndConditions } from './pages/TermsConditions/TermsAndConditions';
 
 function App() {
   const [auth, setAuth] = useState(false)
@@ -25,7 +26,9 @@ function App() {
     setAuth(isAuth)
   }, [isAuth])
 
-  useEffect(() => { dispatch(getMe()) }, [])
+  useEffect(() => {
+    dispatch(getMe())
+  }, [])
   return (
     <Layout>
       <Routes>
@@ -33,10 +36,11 @@ function App() {
         <Route path="posts" element={<PostsPage />} />
         <Route path="post/:id" element={<PostPage />} />
         <Route path="new" element={<AddPostPage />} />
+        <Route path="terms-conditions" element={<TermsAndConditions />} />
         <Route path="post/:id/edit" element={<EditPostPage />} />
-        {!auth ? <Route path="login" element={<LoginPage />} /> : null}
-        {!auth ? <Route path="register" element={<RegisterPage />} /> : null}
-        {auth ? <Route path="profile" element={<ProfilePage />} /> : null}
+        <Route path="login" element={<LoginPage />} />
+        <Route path="register" element={<RegisterPage />} />
+        <Route path="profile" element={<ProfilePage />} />
         <Route path="news" element={<NewsPage />} />
         {/* If page not found */}
         <Route path="*" element={<MainPage />} />

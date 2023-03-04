@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkIsAuth, logout } from '../../redux/features/auth/authSlice'
+import { serverEndpoint } from '../../utils/variables'
 import styled from 'styled-components'
 
 import { Burger } from './Burger'
@@ -11,18 +12,17 @@ import baseAvatar from '../../images/avatar-base.png'
 
 export const Header = () => {
     const isAuth = useSelector(checkIsAuth)
+    const user = useSelector(state => state.auth.user)
     const dispatch = useDispatch()
     let isAuthStyle, isAuthLink = "/login"
     if (isAuth) {
         isAuthStyle = {
-            background: `url("${isAuth.photo ? isAuth.photo : undefined}")`,
+            backgroundImage: `url("${user.avatar ? `${serverEndpoint}/avatars/${user.avatar}` : undefined}")`,
+            backgroundOrigin: "border-box",
+            backgroundSize: "cover",
+            borderRadius: "10px"
         }
         isAuthLink = "/profile"
-    }
-
-    const logoutHandler = () => {
-        dispatch(logout())
-        window.localStorage.removeItem("token")
     }
 
     return (
@@ -98,18 +98,16 @@ const Header_Base = styled.div`
         -webkit-user-select: none;
         -ms-user-select: none;
     }`
-    
+
 const Header_Action = styled(Header_Base)`
     max-width: 960px;
 `
 
 const Profile_Logo = styled.div`
-    background: url(${baseAvatar});;
+    background: url(${baseAvatar});
     background-origin: border-box;
     background-repeat: no-repeat;
-    background-size: contain;
-    background-repeat: no-repeat;
-    border-radius: 20px;
+    background-size: cover;
     width: 18px;
     height: 18px;
     margin-left: auto;

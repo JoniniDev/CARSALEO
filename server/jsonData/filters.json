@@ -1,0 +1,297 @@
+{
+    "brandsAndModels": [
+        {
+            "brand": "Audi",
+            "models": [
+                "A3",
+                "A4",
+                "A5",
+                "A6",
+                "A7",
+                "A8",
+                "Q3",
+                "Q5",
+                "Q7",
+                "Q8",
+                "TT",
+                "e-tron"
+            ]
+        },
+        {
+            "brand": "BMW",
+            "models": [
+                "1 Series",
+                "2 Series",
+                "3 Series",
+                "4 Series",
+                "5 Series",
+                "6 Series",
+                "7 Series",
+                "8 Series",
+                "X1",
+                "X2",
+                "X3",
+                "X4",
+                "X5",
+                "X6",
+                "X7",
+                "Z4"
+            ]
+        },
+        {
+            "brand": "Mercedes-Benz",
+            "models": [
+                "A-Class",
+                "C-Class",
+                "E-Class",
+                "S-Class",
+                "CLA",
+                "CLS",
+                "GLA",
+                "GLC",
+                "GLE",
+                "GLS",
+                "G-Class"
+            ]
+        },
+        {
+            "brand": "Toyota",
+            "models": [
+                "Corolla",
+                "Camry",
+                "RAV4",
+                "Prius",
+                "Highlander",
+                "4Runner",
+                "Land Cruiser",
+                "Tacoma",
+                "Tundra",
+                "Sienna"
+            ]
+        },
+        {
+            "brand": "Honda",
+            "models": [
+                "Civic",
+                "Accord",
+                "CR-V",
+                "Pilot",
+                "Odyssey",
+                "Fit",
+                "HR-V",
+                "Passport",
+                "Ridgeline"
+            ]
+        },
+        {
+            "brand": "Ford",
+            "models": [
+                "Fiesta",
+                "Focus",
+                "Mustang",
+                "Taurus",
+                "Escape",
+                "Edge",
+                "Explorer",
+                "Expedition",
+                "Ranger",
+                "F-150",
+                "F-250",
+                "F-350",
+                "Transit"
+            ]
+        },
+        {
+            "brand": "Chevrolet",
+            "models": [
+                "Spark",
+                "Sonic",
+                "Cruze",
+                "Malibu",
+                "Impala",
+                "Camero",
+                "Corvette",
+                "Equinox",
+                "Traverse",
+                "Tahoe",
+                "Suburban",
+                "Colorado",
+                "Silverado",
+                "Express"
+            ]
+        },
+        {
+            "brand": "Nissan",
+            "models": [
+                "Versa",
+                "Sentra",
+                "Altima",
+                "Maxima",
+                "Kicks",
+                "Rogue Sport",
+                "Rogue",
+                "Murano",
+                "Pathfinder",
+                "Armada",
+                "Frontier",
+                "Titan",
+                "NV200",
+                "Leaf",
+                "GT-R"
+            ]
+        },
+        {
+            "brand": "Tesla",
+            "models": [
+                "Model S",
+                "Model X",
+                "Model 3",
+                "Model Y",
+                "Roadster"
+            ]
+        },
+        {
+            "brand": "Volkswagen",
+            "models": [
+                "Golf",
+                "Jetta",
+                "Passat",
+                "Arteon",
+                "Atlas",
+                "Tiguan",
+                "ID.4",
+                "Taos"
+            ]
+        },
+        {
+            "brand": "Hyundai",
+            "models": [
+                "Accent",
+                "Elantra",
+                "Sonata",
+                "Veloster",
+                "Kona",
+                "Tucson",
+                "Santa Fe",
+                "Palisade"
+            ]
+        },
+        {
+            "brand": "Kia",
+            "models": [
+                "Rio",
+                "Forte",
+                "Optima",
+                "Stinger",
+                "Soul",
+                "Seltos",
+                "Sportage",
+                "Sorento",
+                "Telluride"
+            ]
+        },
+        {
+            "brand": "Subaru",
+            "models": [
+                "Impreza",
+                "Legacy",
+                "WRX",
+                "Crosstrek",
+                "Forester",
+                "Outback",
+                "Ascent"
+            ]
+        },
+        {
+            "brand": "Mazda",
+            "models": [
+                "Mazda3",
+                "Mazda6",
+                "MX-5 Miata",
+                "CX-3",
+                "CX-30",
+                "CX-5",
+                "CX-9"
+            ]
+        },
+        {
+            "brand": "Jeep",
+            "models": [
+                "Wrangler",
+                "Grand Cherokee",
+                "Cherokee",
+                "Compass",
+                "Renegade",
+                "Gladiator"
+            ]
+        }
+    ],
+    "cities": [
+        "Київ",
+        "Харьків",
+        "Одеса",
+        "Дніпро",
+        "Донецьк",
+        "Запоріжжя",
+        "Львів",
+        "Кривий Ріг",
+        "Миколаїв",
+        "Маріуполь",
+        "Севастополь",
+        "Луганськ",
+        "Вінниця",
+        "Сімферополь",
+        "Макіївка",
+        "Херсон",
+        "Чернігів",
+        "Полтава",
+        "Черкаси",
+        "Хмельницький",
+        "Чернівці",
+        "Житомир",
+        "Суми",
+        "Рівне",
+        "Івано-Франківськ",
+        "Кам'янське",
+        "Кропивницький",
+        "Тернопіль",
+        "Кременчук",
+        "Луцьк",
+        "Біла Церква",
+        "Краматорськ",
+        "Мелітополь",
+        "Керч",
+        "Ужгород",
+        "Бердянськ",
+        "Нікополь",
+        "Слов'янськ",
+        "Бровари",
+        "Євпаторія",
+        "Алчевськ",
+        "Павлоград",
+        "Сєвєродонецьк"
+    ],
+    "carTypes": ["Седан", "Універсал", "Хетчбек", "Купе", "Кросовер", "Кабріолет", "Мінівен", "Пікап", "Лімузин", "Ліфтбек", "Родстер", "Фастбек", "Мікровен"],
+    "state": ["Ідеальний стан", "Сліди використання", "Після ДТП", "На запчастини"],
+    "userTypes": ["Користувач", "Дилер"],
+    "fuelTypes": ["Бензин", "Газ", "Дизель", "Електро"],
+    "colors": [
+        "Червоний",
+        "Жовтий",
+        "Зелений",
+        "Синій",
+        "Фіолетовий",
+        "Блакитний",
+        "Рожевий",
+        "Оранжевий",
+        "Коричневий",
+        "Сірий",
+        "Чорний",
+        "Білий",
+        "Бежевий",
+        "Кремовий",
+        "Салатовий",
+        "Синьо-зелений",
+        "Бордовий"
+    ]
+}

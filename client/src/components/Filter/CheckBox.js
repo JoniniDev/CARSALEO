@@ -1,14 +1,25 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
-export const CheckBox = ({ item }) => {
+export const CheckBox = ({ item, onCheck, activity }) => {
     const [check, setCheck] = useState(false)
 
-    const onCheck = () => {
+    const checkHandler = () => {
         setCheck((check) => !check)
+        onCheck(item)
     }
+
+    useEffect(() => {
+        setCheck(false)
+    }, [activity])
+
+    useEffect(() => {
+        setCheck(false)
+    }, [])
+
+
     return (
-        <Container onClick={onCheck}><Input readOnly checked={check} type="checkbox" value={item} name={item} /><label htmlFor={item}>{item}</label></Container>
+        <Container onClick={checkHandler}><Input readOnly checked={check} type="checkbox" value={item} name={item} /><label htmlFor={item}>{item}</label></Container>
     )
 }
 

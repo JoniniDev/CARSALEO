@@ -3,16 +3,14 @@ import { Link, Navigate, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkIsAuth, registerUser } from '../../redux/features/auth/authSlice'
+import { Form } from './Form'
 import { PreviewPost } from './PreviewPost'
 import { InputFilter, Input as InputFromFilter } from '../../components/Filter/InputFilter'
 import { DropdownFilter, Select } from '../../components/Filter/DropdownFilter'
 import validator from 'validator'
 
 export const AddPostPage = () => {
-  const [email, setEmail] = useState("")
-  const [fullName, setFullName] = useState("")
-  const [password, setPassword] = useState("")
-  const [repartPassword, setRepartPassword] = useState("")
+  const [form, setForm] = useState()
   const [errorMsg, setErrorMsg] = useState("")
 
   const isAuth = useSelector(checkIsAuth)
@@ -35,29 +33,29 @@ export const AddPostPage = () => {
     }
   }, [status, navigate, isAuth])
 
-  const handleSumbit = () => {
-    try {
-      if (email && password && repartPassword && fullName) {
-        if (validator.isEmail(email)) {
-          if (password === repartPassword) {
-            // dispatch(registerUser({ email, fullName, password }))
-            // setEmail("")
-            // setPassword("")
-            // setRepartPassword("")
-          } else {
-            setErrorMsg("Паролі повинні співпадати")
-          }
-        } else {
-          setErrorMsg("Е-мейл некоректний")
-        }
-      } else {
-        console.log("data")
-        setErrorMsg("Перевірте правильність введених даних")
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
+  // const handleSumbit = () => {
+  //   try {
+  //     if (email && password && repartPassword && fullName) {
+  //       if (validator.isEmail(email)) {
+  //         if (password === repartPassword) {
+  //           // dispatch(registerUser({ email, fullName, password }))
+  //           // setEmail("")
+  //           // setPassword("")
+  //           // setRepartPassword("")
+  //         } else {
+  //           setErrorMsg("Паролі повинні співпадати")
+  //         }
+  //       } else {
+  //         setErrorMsg("Е-мейл некоректний")
+  //       }
+  //     } else {
+  //       console.log("data")
+  //       setErrorMsg("Перевірте правильність введених даних")
+  //     }
+  //   } catch (error) {
+  //     console.log(error)
+  //   }
+  // }
 
   return (
     <>
@@ -66,80 +64,10 @@ export const AddPostPage = () => {
       </SubHeader>
       <Form_Container>
         <Small_Label>Попередній перегляд</Small_Label>
-        <PreviewPost />
+        {form ? <PreviewPost {...form} /> : null}
       </Form_Container>
       <General_Form onSubmit={e => e.preventDefault()}>
-        <Form_Container>
-          <Small_Label>Редагування</Small_Label>
-          <Chapter><p>1. Основна інформація про автомобіль</p><hr /></Chapter>
-          <SubContainer>
-            <Label>
-              Бренд:
-              <StyledDropdownFilter data={[{ value: "data", label: "data" }]} />
-            </Label>
-            <Label>
-              Модель:
-              <StyledDropdownFilter data={[{ value: "data", label: "data" }]} />
-            </Label>
-            <Label>
-              Ціна:
-              <LabelContainer><StyledInputFilter placeholderText="Ваша ціна" /><div>$</div></LabelContainer>
-            </Label>
-            <Label>
-              Тип:
-              <StyledDropdownFilter data={[{ value: "data", label: "data" }]} />
-            </Label>
-            <Label>
-              Колір:
-              <LabelContainer><StyledDropdownFilter data={[{ value: "data", label: "data" }]} /></LabelContainer>
-            </Label>
-            <Label>
-              Пробіг:
-              <LabelContainer><StyledInputFilter /><span>км</span></LabelContainer>
-            </Label>
-            <Label>
-              Державний номер:
-              <Input type="text" value={repartPassword} onChange={(e) => { setRepartPassword(e.target.value); setErrorMsg(null) }} placeholder='Ваш пароль' />
-            </Label>
-          </SubContainer>
-        </Form_Container>
-        <Form_Container>
-          <Chapter><p>2. Основна інформація про автомобіль</p> <hr /></Chapter>
-          <Label>
-            VIN-Номер:
-            <Input type="text" value={repartPassword} onChange={(e) => { setRepartPassword(e.target.value); setErrorMsg(null) }} placeholder='Ваш пароль' />
-          </Label>
-          <Label>
-            Двигун:
-            <LabelContainer><StyledInputFilter contextmin={0.1} contextmax={10} /><span>л</span></LabelContainer>
-          </Label>
-          <Label>
-            Паливо:
-            <Input type="password" value={repartPassword} onChange={(e) => { setRepartPassword(e.target.value); setErrorMsg(null) }} placeholder='Ваш пароль' />
-          </Label>
-          <Label>
-            Рік випуску:
-            <Input type="password" value={repartPassword} onChange={(e) => { setRepartPassword(e.target.value); setErrorMsg(null) }} placeholder='Ваш пароль' />
-          </Label>
-          <Label>
-            Регіон:
-            <Input type="password" value={repartPassword} onChange={(e) => { setRepartPassword(e.target.value); setErrorMsg(null) }} placeholder='Ваш пароль' />
-          </Label>
-          <Label>
-            Стан:
-            <Input type="password" value={repartPassword} onChange={(e) => { setRepartPassword(e.target.value); setErrorMsg(null) }} placeholder='Ваш пароль' />
-          </Label>
-          <Label>
-            Опис:
-            {/* <InputArea type="text" value={repartPassword} onChange={(e) => { setRepartPassword(e.target.value); setErrorMsg(null) }} placeholder='Ваш пароль' /> */}
-          </Label>
-          <Label>
-            Зоображення:
-            <Input type="file" placeholder='' />
-          </Label>
-          <Controls><span>Погоджуюсь з умовами</span><button type='submit' onClick={handleSumbit}>Створити</button></Controls>
-          {errorMsg ? <ErrorMsg>{errorMsg}</ErrorMsg> : null}
-        </Form_Container>
+        <Form onFormChanged={setForm}/>
       </General_Form>
     </>
   )
@@ -154,7 +82,6 @@ const SubHeader = styled.div`
 
 const Title = styled.h2`
     margin: 10px 0;
-    margin-left: 20px;
     padding: 10px;
 `
 
@@ -192,8 +119,8 @@ const Form_Container = styled.div`
     display: block;
     margin: 10px auto;
     width: 100%;
-    padding: 0 30px;
-    padding-bottom: 40px;
+    padding: 0 10px;
+    padding-bottom: 10px;
     user-select: none;
     box-sizing: border-box;
     -moz-user-select: none;
@@ -226,6 +153,7 @@ const General_Label = styled.h1`
 
 const Small_Label = styled(General_Label)`
     font-size: 21px;
+    padding: 10px 2px;
 `
 
 const Label = styled.label`

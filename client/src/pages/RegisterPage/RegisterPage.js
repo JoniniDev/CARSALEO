@@ -3,7 +3,9 @@ import { Link, Navigate, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkIsAuth, registerUser } from '../../redux/features/auth/authSlice'
+import useWindowDimensions from '../../utils/useWindowDimensions'
 import validator from 'validator'
+import ReCAPTCHA from "react-google-recaptcha";
 
 export const RegisterPage = () => {
   const [email, setEmail] = useState("")
@@ -11,6 +13,9 @@ export const RegisterPage = () => {
   const [password, setPassword] = useState("")
   const [repartPassword, setRepartPassword] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
+  const [recaptcha, setRecaptcha] = useState(false)
+  const [TermsAndConditions, setTermsAndConditions] = useState(false)
+  const { width } = useWindowDimensions();
 
   const isAuth = useSelector(checkIsAuth)
 
@@ -35,23 +40,34 @@ export const RegisterPage = () => {
     }
   }, [status, navigate])
 
+  const handleCaptcha = () => {
+    setRecaptcha(true)
+  }
+
   const handleSumbit = () => {
     try {
       if (email && password && repartPassword && fullName) {
-        if (validator.isEmail(email)) {
-          if (password === repartPassword) {
-            dispatch(registerUser({ email, fullName, password }))
-            setEmail("")
-            setPassword("")
-            setRepartPassword("")
+        if (recaptcha) {
+          if (TermsAndConditions) {
+            if (validator.isEmail(email)) {
+              if (password === repartPassword) {
+                dispatch(registerUser({ email, fullName, password }))
+                setEmail("")
+                setPassword("")
+                setRepartPassword("")
+              } else {
+                setErrorMsg("Паролі повинні співпадати")
+              }
+            } else {
+              setErrorMsg("Е-мейл некоректний")
+            }
           } else {
-            setErrorMsg("Паролі повинні співпадати")
+            setErrorMsg("Ви не погодились з умовами використання сайту")
           }
         } else {
-          setErrorMsg("Е-мейл некоректний")
+          setErrorMsg("Пройдіть перевірку на робота")
         }
       } else {
-        console.log("data")
         setErrorMsg("Перевірте правильність введених даних")
       }
     } catch (error) {
@@ -65,40 +81,66 @@ export const RegisterPage = () => {
       <General_Form onSubmit={e => e.preventDefault()}>
         <Label>
           Е-Мейл:
-          <Input type="text" value={email} onChange={(e) => { setEmail(e.target.value); setErrorMsg(null) }} placeholder='Ваш Email' />
+          <Input type="text" value={email} onChange={(e) => { setEmail(e.target.value.trim()); setErrorMsg(null) }} placeholder='Ваш Email' />
         </Label>
         <Label>
           Прізвище та ім'я:
-          <Input type="text" value={fullName} onChange={(e) => { setFullName(e.target.value); setErrorMsg(null) }} placeholder="Ваше прізвище та ім'я" />
+          <Input type="text" value={fullName} onChange={(e) => { setFullName(e.target.value.trim()); setErrorMsg(null) }} placeholder="Ваше прізвище та ім'я" />
         </Label>
         <Label>
           Пароль:
-          <Input type="password" value={password} onChange={(e) => { setPassword(e.target.value); setErrorMsg(null) }} placeholder='Ваш пароль' />
+          <Input type="password" value={password} onChange={(e) => { setPassword(e.target.value.trim()); setErrorMsg(null) }} placeholder='Ваш пароль' />
         </Label>
         <Label>
           Повтор паролю:
-          <Input type="password" value={repartPassword} onChange={(e) => { setRepartPassword(e.target.value); setErrorMsg(null) }} placeholder='Ваш пароль' />
+          <Input type="password" value={repartPassword} onChange={(e) => { setRepartPassword(e.target.value.trim()); setErrorMsg(null) }} placeholder='Ваш пароль' />
         </Label>
-        <Controls><button type='submit' onClick={handleSumbit}>Зареєструватися</button><span>Вже є обліковий запис? <Link className='link' to="/login">Увiйти</Link></span></Controls>
+        <Controls>
+          <ReCAPTCHA
+            sitekey="6Ldhsa4kAAAAAKa5ma3h8tDs2G2sawsCNIUIfIlP"
+            onChange={handleCaptcha}
+            hl="uk"
+            size={(width < 400) ? "compact" : "normal"}
+          />
+          <TermsGroup><input type="checkbox" id="terms" value={TermsAndConditions} onChange={() => { setTermsAndConditions(!TermsAndConditions) }} /><TermsText><label htmlFor="terms">Погоджуюсь з </label><Link to={"/terms-conditions?type=general"} target="_blank" style={{ color: "#fff", textDecorationLine: "underline" }}>умовами користування сайтом</Link></TermsText></TermsGroup>
+          <button type='submit' onClick={handleSumbit}>Зареєструватися</button><span>Вже є обліковий запис? <Link className='link' to="/login">Увiйти</Link></span></Controls>
         {errorMsg ? <ErrorMsg>{errorMsg}</ErrorMsg> : null}
       </General_Form>
     </Form_Container>
   )
 }
 
+const TermsGroup = styled.div`
+    display: flex;
+    align-items: flex-start;
+    margin: 10px 0;
+    margin-bottom: 0;
+    input {
+        margin-right: 8px;
+    }
+`
+
+const TermsText = styled.div`
+  display: block;
+  margin: auto;
+  width: 100%;
+  color: #fff;
+
+`
+
 const Form_Container = styled.div`
-    display: block;
-    margin: 180px auto;
-    margin-bottom: 300px;
-    max-width: 500px;
-    padding-bottom: 40px;
-    user-select: none;
-    -moz-user-select: none;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    border-radius: 5px;
-    background: #cc4343;
+  display: block;
+  margin: 180px auto;
+  margin-bottom: 300px;
+  max-width: 500px;
+  padding-bottom: 40px;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  border-radius: 5px;
+  background: #cc4343;
 `
 
 const General_Form = styled.form`
@@ -161,10 +203,10 @@ const Controls = styled.div`
     width: 100%;
     margin-top: 20px;
     margin-bottom: 12px;
-
     button {
         width: 100%;
         background: #fff;
+        margin-top: 20px;
         padding: 10px;
         margin-bottom: 10px;
         border: none;

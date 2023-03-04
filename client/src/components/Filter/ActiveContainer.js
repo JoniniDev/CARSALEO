@@ -4,7 +4,7 @@ import { InputFilter, Input } from './InputFilter'
 import { DropdownFilter } from './DropdownFilter'
 import { CheckBoxFilter } from './CheckBoxFilter'
 
-export const ActiveContainer = ({ type, data, min, max, inputText, limit, active }) => {
+export const ActiveContainer = ({ type, data, min, max, inputText, limit, active, onChangeData, activity }) => {
     const [values, setValues] = useState({ value1: undefined, value2: undefined })
 
     useEffect(() => {
@@ -13,11 +13,20 @@ export const ActiveContainer = ({ type, data, min, max, inputText, limit, active
         }
     }, [values])
 
+    const onChangeHandler = (data) => {
+        onChangeData(data)
+    }
+
     const setType = (containerType) => {
         switch (containerType) {
             case "checkbox":
                 return (
-                    <CheckBoxFilter data={data} limit={limit} />
+                    <CheckBoxFilter
+                        onSelected={(data) => { onChangeHandler(data) }}
+                        data={data}
+                        limit={limit}
+                        activity={activity}
+                    />
                 )
             case "inputs":
                 return (
@@ -27,13 +36,17 @@ export const ActiveContainer = ({ type, data, min, max, inputText, limit, active
                             contextmax={max}
                             validedValue={values.value1}
                             onValue={(value) => { setValues((prev) => { return { ...prev, value1: value } }) }}
-                            placeholderText="від" /> -
+                            placeholderText="від"
+                            activity={activity}
+                        /> -
                         <StyledInputFilter
                             contextmin={min}
                             contextmax={max}
                             validedValue={values.value2}
                             onValue={(value) => { setValues((prev) => { return { ...prev, value2: value } }) }}
-                            placeholderText="до" />
+                            placeholderText="до"
+                            activity={activity}
+                        />
                         {inputText ? inputText : ""}
                     </SubContainer>
                 )
@@ -44,12 +57,16 @@ export const ActiveContainer = ({ type, data, min, max, inputText, limit, active
                             data={data}
                             validedValue={values.value1}
                             onValue={(value) => { setValues((prev) => { return { ...prev, value1: value } }) }}
-                            placeholderText="від" /> -
+                            placeholderText="від"
+                            activity={activity}
+                        /> -
                         <DropdownFilter
                             data={data}
                             validedValue={values.value2}
                             onValue={(value) => { setValues((prev) => { return { ...prev, value2: value } }) }}
-                            placeholderText="до" />
+                            placeholderText="до"
+                            activity={activity}
+                        />
                         {inputText ? inputText : ""}
                     </SubContainer>
                 )
@@ -76,6 +93,7 @@ const Container = styled.div`
     width: 100%;
     height: max-content;
     padding: 10px 5px;
+    /* padding-bottom: 10px; */
     box-sizing: border-box;
 `
 

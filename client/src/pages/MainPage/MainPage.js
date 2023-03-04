@@ -18,12 +18,12 @@ export const MainPage = () => {
       <Car_Reapeter>
         <FastFilter />
       </Car_Reapeter>
-      <Rec_Reapeter>
+      {/* <Rec_Reapeter>
 
       </Rec_Reapeter>
       <Categories_Reapeater>
 
-      </Categories_Reapeater>
+      </Categories_Reapeater> */}
     </>
   )
 }

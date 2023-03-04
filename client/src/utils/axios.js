@@ -1,11 +1,13 @@
 import axois from 'axios'
+import { serverEndpoint } from './variables'
 
 const instance = axois.create({
-    baseURL: 'http://localhost:3002/api',
+    baseURL: `${serverEndpoint}api`,
 })
 
 instance.interceptors.request.use(config => {
     config.headers.Authorization = window.localStorage.getItem("token")
+    config.headers.AccessControlAllowOrigin = "*"
     return config
 })
 

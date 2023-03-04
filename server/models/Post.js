@@ -54,7 +54,7 @@ const PostSchema = new mongoose.Schema(
             default: 0
         },
         owner: {
-            type: String, required: true
+            type: mongoose.Schema.Types.ObjectId, required: true
         }
     },
     { timestamps: true }

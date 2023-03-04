@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { checkIsAuth, loginUser } from '../../redux/features/auth/authSlice'
+import useWindowDimensions from '../../utils/useWindowDimensions'
+import ReCAPTCHA from "react-google-recaptcha";
 import styled from 'styled-components'
 
 export const LoginPage = () => {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [errorMsg, setErrorMsg] = useState("")
+  const [recaptcha, setRecaptcha] = useState(false)
+  const { width } = useWindowDimensions();
 
   const { status } = useSelector((state) => state.auth)
   const isAuth = useSelector(checkIsAuth)
@@ -31,12 +35,20 @@ export const LoginPage = () => {
     }
   }, [status, navigate])
 
+  const handleCaptcha = () => {
+    setRecaptcha(true)
+  }
+
   const handleSumbit = () => {
     try {
       if (email && password) {
-        dispatch(loginUser({ email, password }))
-        setEmail("")
-        setPassword("")
+        if (recaptcha) {
+          dispatch(loginUser({ email, password }))
+          setEmail("")
+          setPassword("")
+        } else {
+          setErrorMsg("Пройдіть перевірку на робота")
+        }
       } else {
         setErrorMsg("Перевірте правильність введених даних")
       }
@@ -44,19 +56,27 @@ export const LoginPage = () => {
       console.log(error)
     }
   }
+
   return (
     <Form_Container>
       <General_Label>Увiйти</General_Label>
       <General_Form onSubmit={e => e.preventDefault()}>
         <Label className='label'>
           Е-Мейл:
-          <div><Input type="text" onChange={(e) => { setEmail(e.target.value); setErrorMsg(null) }} value={email} placeholder='Ваш Email' /></div>
+          <div><Input type="text" onChange={(e) => { setEmail(e.target.value.trim()); setErrorMsg(null) }} value={email} placeholder='Ваш Email' /></div>
         </Label>
         <Label className='label'>
           Пароль:
-          <div><Input type="password" onChange={(e) => { setPassword(e.target.value); setErrorMsg(null) }} value={password} placeholder='Ваш пароль' /></div>
+          <div><Input type="password" onChange={(e) => { setPassword(e.target.value.trim()); setErrorMsg(null) }} value={password} placeholder='Ваш пароль' /></div>
         </Label>
-        <Controls><button type='submit' onClick={handleSumbit}>Увiйти</button><span>Немає облікового запису? <Link className='link' to="/register">Створити</Link></span></Controls>
+        <Controls>
+          <ReCAPTCHA
+            sitekey="6Ldhsa4kAAAAAKa5ma3h8tDs2G2sawsCNIUIfIlP"
+            onChange={handleCaptcha}
+            hl="uk"
+            size={(width < 400) ? "compact" : "normal"}
+          />
+          <button type='submit' onClick={handleSumbit}>Увiйти</button><span>Немає облікового запису? <Link className='link' to="/register">Створити</Link></span></Controls>
         {errorMsg ? <ErrorMsg>{errorMsg}</ErrorMsg> : null}
       </General_Form>
     </Form_Container>
@@ -143,6 +163,7 @@ const Controls = styled.div`
     button {
         width: 100%;
         background: #fff;
+        margin-top: 20px;
         padding: 10px;
         margin-bottom: 10px;
         border: none;

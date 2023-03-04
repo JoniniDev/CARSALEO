@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 
-export const InputFilter = ({ className, contextmin, contextmax, type, placeholderText, onValue, validedValue }) => {
+export const InputFilter = ({ className, contextmin, contextmax, placeholderText, onValue, validedValue, activity }) => {
     const [value, setValue] = useState()
 
     const setFiled = ({ target }) => {
@@ -15,6 +15,10 @@ export const InputFilter = ({ className, contextmin, contextmax, type, placehold
         setValue(validedValue)
     }, [validedValue])
 
+    useEffect(() => {
+        setValue()
+    }, [activity])
+
     return (
         <ParentDiv className={className}>
             <Input
@@ -23,7 +27,7 @@ export const InputFilter = ({ className, contextmin, contextmax, type, placehold
                 onBlur={() => { onValue(value) }}
                 value={value || ""}
                 min={Math.min(Number(contextmin || 0), Number(contextmin || 0)) || ""}
-                max={Math.max(Number(contextmax || 999999999999), Number(contextmax || 999999999999)) || ""}
+                max={Math.max(Number(contextmax || 10000000000), Number(contextmax || 10000000000)) || ""}
                 placeholder={placeholderText} />
         </ParentDiv>
     )

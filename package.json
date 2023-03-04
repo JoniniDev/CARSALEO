@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react-content-loader": "^6.2.0",
+    "react-loading-skeleton": "^3.1.1"
+  }
+}
