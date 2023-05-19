@@ -1,14 +1,18 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { Post } from './Post'
 
-export const AllPosts = () => {
-    const [posts, setPosts] = useState([{ id: "Dsadqrqfasd12rfds", thumbnail: "", title: "BMW X5 2022" }, { id: "Dsadqrqfasd12drfds", thumbnail: "", title: "BMW" }, { id: "Dsadqrqfasad12rfds", thumbnail: "", title: "BMW X5 2022" },])
+export const AllPosts = ({ posts }) => {
+    const [previewPosts, setpreviewPosts] = useState([])
+
+    useEffect(()=>{
+        setpreviewPosts(posts)
+    }, [posts])
 
     return (
         <Container>
-            {posts.map((post) => {
-                return <Post key={post.id} title={post.title} thumbnail={post.thumbnail} />
+            {previewPosts.map((post) => {
+                return <Post key={post._id} postData={post}/>
             })}
         </Container>
     )

@@ -1,24 +1,45 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+import { serverEndpoint } from '../../utils/variables'
 
-export const Post = ({ id, title, thumbnail }) => {
-    thumbnail = "https://cdn3.riastatic.com/photosnew/auto/photo/bmw_x5__482329208hd.webp"
+
+export const Post = ({ postData }) => {
+
+    const parsePrice = (price) => {
+        const priceString = String(price).replace(/\s/g, '');
+        const groups = priceString.split('').reverse().join('').match(/\d{1,3}/g);
+        const parsedPrice = groups.join(' ').split('').reverse().join('');
+        return parsedPrice;
+    }
+
+    const parseMileage = (mileage) => {
+        if (mileage >= 1000 && mileage < 1000000) {
+            const abbreviatedMileage = (mileage / 1000).toFixed(0);
+            return `${abbreviatedMileage} тис.`;
+        } else {
+            return String(mileage);
+        }
+    }
+
+
+    const { brand, model, priceUSD, priceUAH, carType, color, mileage, carNumber, vinNumber, capacity, fuel, year, region, state, description, images } = postData
+
     return (
         <PostContainer>
-            <Link style={{height: "100%",}}to="/"><ImageBox image={thumbnail}/></Link>
+            <Link style={{ height: "100%", }} to="/"><ImageBox image={`${serverEndpoint}/posts/${images[0]}`} /></Link>
             <InfoBox>
-                <Title><Link style={{ color: 'inherit' }}>{title}</Link><Price>91 999 $<PriceSm> ~ 3 681 800 ₴</PriceSm></Price></Title>
+                <Title><Link style={{ color: 'inherit' }}>{brand} {model} {year}</Link><Price>${parsePrice(priceUSD)}<PriceSm> ~ ₴ {parsePrice(priceUAH)}</PriceSm></Price></Title>
                 <TextContainer>
                     <TextGroup>
-                        <Text>Пробіг: 10 тис. км</Text>
-                        <Text>Двигун: Бензин / 2.8 л</Text>
-                        <Text>Колір: Білий</Text>
+                        <Text>Пробіг: {parseMileage(mileage)} км</Text>
+                        <Text>Двигун: {fuel} / {capacity} л</Text>
+                        <Text>Колір: {color}</Text>
                     </TextGroup>
                     <TextGroup>
-                        <Text>Місто: Полтава</Text>
-                        <Text>Стан: Ідеальний</Text>
-                        <Text>Продавець: Дилер</Text>
+                        <Text>Місто: {region}</Text>
+                        <Text>Стан: {state}</Text>
+                        <Text>Продавець: Користувач</Text>
                     </TextGroup>
                 </TextContainer>
             </InfoBox>

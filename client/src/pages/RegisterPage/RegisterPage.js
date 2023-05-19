@@ -54,6 +54,7 @@ export const RegisterPage = () => {
                 dispatch(registerUser({ email, fullName, password }))
                 setEmail("")
                 setPassword("")
+                setFullName("")
                 setRepartPassword("")
               } else {
                 setErrorMsg("Паролі повинні співпадати")
@@ -85,7 +86,7 @@ export const RegisterPage = () => {
         </Label>
         <Label>
           Прізвище та ім'я:
-          <Input type="text" value={fullName} onChange={(e) => { setFullName(e.target.value.trim()); setErrorMsg(null) }} placeholder="Ваше прізвище та ім'я" />
+          <Input type="text" value={fullName} onChange={(e) => { setFullName(e.target.value); setErrorMsg(null) }} placeholder="Ваше прізвище та ім'я" />
         </Label>
         <Label>
           Пароль:

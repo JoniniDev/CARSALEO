@@ -3,6 +3,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux';
 import { getMe } from './redux/features/auth/authSlice'
 import { checkIsAuth } from './redux/features/auth/authSlice'
+import { Helmet } from "react-helmet";
 
 import { Layout } from "./components/Layout/Layout"
 import { PostPage } from "./pages/PostPage/PostPage";
@@ -29,8 +30,12 @@ function App() {
   useEffect(() => {
     dispatch(getMe())
   }, [])
+
   return (
     <Layout>
+      <Helmet>
+        <title>CARSALEO</title>
+      </Helmet>
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="posts" element={<PostsPage />} />

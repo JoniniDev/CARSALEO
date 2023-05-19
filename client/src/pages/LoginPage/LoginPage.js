@@ -44,12 +44,11 @@ export const LoginPage = () => {
       if (email && password) {
         if (recaptcha) {
           dispatch(loginUser({ email, password }))
-          setEmail("")
-          setPassword("")
         } else {
           setErrorMsg("Пройдіть перевірку на робота")
         }
       } else {
+        setPassword("")
         setErrorMsg("Перевірте правильність введених даних")
       }
     } catch (error) {

@@ -1,6 +1,7 @@
 import User from '../models/User.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { sendEmail } from '../utils/sendEmail.js'
 import dotenv from 'dotenv'
 
 // reg
@@ -27,6 +28,8 @@ export const reg = async (req, res) => {
         const token = jwt.sign({ id: newUser._id }, process.env.JWT_AUTH, { expiresIn: '30d' })
 
         await newUser.save()
+
+        sendEmail(email, "reg", {name: fullName})
 
         res.json({
             user: newUser,

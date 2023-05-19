@@ -1,15 +1,29 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { FiltersBox } from './FiltersBox'
 import { AllPosts } from './AllPosts'
 import { useDispatch, useSelector } from 'react-redux'
+import { getPostsByFilter, getPosts } from '../../redux/features/post/postSlice'
 
 export const PostsPage = () => {
+  const dispatch = useDispatch()
+  const filter = {}
+  const posts = useSelector(getPosts)
+
+  useEffect(() => {
+    const data = dispatch(getPostsByFilter(filter))
+  }, [])
+
+  useEffect(() => {
+    console.log("d", posts)
+  }, [posts])
+
+
   return (
     <Container>
       <FiltersBox />
-          <Title>Автомобілі в Україні <SubTitle>(знайдено 8412)</SubTitle></Title>
-      <AllPosts />
+      <Title>Автомобілі в Україні <SubTitle>(знайдено 8412)</SubTitle></Title>
+      <AllPosts posts={posts}/>
     </Container>
   )
 }

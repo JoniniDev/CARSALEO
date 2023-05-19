@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 
-export const CheckBox = ({ item, onCheck, activity }) => {
+export const CheckBox = ({ item, onCheck, activity, validate }) => {
     const [check, setCheck] = useState(false)
 
     const checkHandler = () => {

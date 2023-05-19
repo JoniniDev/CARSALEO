@@ -149,7 +149,7 @@ export const FiltersBox = () => {
                     activity={activity}
                     type="checkbox"
                     onChangeFilter={(data) => { onChangeData(setSelectedCity, data) }}
-                    data={filters ? filters.colors : null}
+                    data={filters ? filters.colors.map(item => { {return item.text}}) : null}
                     limit={6}
                 >Колір</Filter>
             </CategoryBox>

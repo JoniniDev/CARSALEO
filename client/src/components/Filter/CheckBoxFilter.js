@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { CheckBox } from './CheckBox'
 
 
-export const CheckBoxFilter = ({ data, limit, onSelected, activity }) => {
+export const CheckBoxFilter = ({ data, limit, onSelected, activity, validate }) => {
     const [resData, setResData] = useState([])
     const [activeArray, setActiveArray] = useState([])
     const [buttonActive, setButtonActive] = useState(true)

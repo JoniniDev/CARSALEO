@@ -14,7 +14,12 @@ export const registerUser = createAsyncThunk(
         try {
             const { data } = await axios.post("/auth/reg", {
                 email, password, fullName
-            })
+            },
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
             if (data.token) {
                 window.localStorage.setItem("token", data.token)
             }
@@ -30,7 +35,12 @@ export const loginUser = createAsyncThunk(
         try {
             const { data } = await axios.post("/auth/log", {
                 email, password
-            })
+            },
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
             if (data.token) {
                 window.localStorage.setItem("token", data.token)
             }
@@ -44,7 +54,12 @@ export const getMe = createAsyncThunk(
     'auth/getMe',
     async () => {
         try {
-            const { data } = await axios.get("/auth/getUser")
+            const { data } = await axios.get("/auth/getUser",
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                })
             return data
         } catch (error) {
             return error.response.data

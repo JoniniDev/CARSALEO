@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
 
-export const InputFilter = ({ className, contextmin, contextmax, placeholderText, onValue, validedValue, activity }) => {
+export const InputFilter = ({ className, contextmin, contextmax, placeholderText, onValue, validedValue, activity, validate }) => {
     const [value, setValue] = useState()
 
     const setFiled = ({ target }) => {

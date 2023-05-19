@@ -2,12 +2,14 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { InputFilter, Input as InputFromFilter } from '../../components/Filter/InputFilter'
+import { PhotosLoader } from './PhotosLoader'
 import { DropdownFilter, Select } from '../../components/Filter/DropdownFilter'
 import { getAllFilters } from '../../services/filter'
 
 export const Form = ({ onFormChanged }) => {
     const [selecterData, setSelecterData] = useState()
-    const [modelByBrand, setModelByBrand] = useState([{ label: "test", value: "test" }])
+    const [errorMsg, setErrorMsg] = useState("")
+    const [modelByBrand, setModelByBrand] = useState([])
     const [brand, setBrand] = useState("")
     const [model, setModel] = useState("")
     const [activity, setActivity] = useState({})
@@ -23,7 +25,7 @@ export const Form = ({ onFormChanged }) => {
     const [region, setRegion] = useState("")
     const [state, setState] = useState("")
     const [description, setDescription] = useState("")
-    const [images, setImages] = useState("")
+    const [images, setImages] = useState([])
 
     useEffect(() => {
         filtersCallBack()
@@ -32,7 +34,13 @@ export const Form = ({ onFormChanged }) => {
     useEffect(() => {
         setModel("")
         setActivity(brand)
+        const findedModel = selecterData ? selecterData.brandsAndModels.find(item => item.brand === brand) : null
+        setModelByBrand(findedModel ? findedModel.models.map(item => { return { label: item, value: item } }) : null)
     }, [brand])
+
+    // useEffect(() => {
+    //     handleLoadPhoto(images)
+    // }, [images])
 
     useEffect(() => {
         if (onFormChanged) {
@@ -41,11 +49,6 @@ export const Form = ({ onFormChanged }) => {
             })
         }
     }, [brand, model, price, carType, color, mileage, carNumber, vinNumber, capacity, fuel, year, region, state, description, images])
-
-    useEffect(() => {
-        const findedModel = selecterData ? selecterData.brandsAndModels.find(item => item.brand === brand) : null
-        setModelByBrand(findedModel ? findedModel.models.map(item => { return { label: item, value: item } }) : null)
-    }, [brand])
 
     const patternHandler = (value, method, pattern) => {
         method(value.replace(pattern, ""))
@@ -74,58 +77,58 @@ export const Form = ({ onFormChanged }) => {
                 <SubContainer>
                     <Label>
                         Бренд:
-                        <StyledDropdownFilter onModificate={setBrand} data={selecterData ? selecterData.brandsAndModels.map(item => { return { label: item.brand, value: item.brand, } }) : null} />
+                        <StyledDropdownFilter onModificate={setBrand} data={selecterData ? selecterData.brandsAndModels.map(item => { return { label: item.brand, value: item.brand, } }) : null} validate />
                     </Label>
                     <Label>
                         Модель:
-                        <StyledDropdownFilter onModificate={setModel} activity={activity} data={modelByBrand} />
+                        <StyledDropdownFilter onModificate={setModel} activity={activity} data={modelByBrand} validate />
                     </Label>
                     <Label>
                         Ціна:
-                        <LabelContainer><StyledInputFilter onValue={setPrice} placeholderText="Ваша ціна" /><div>$</div></LabelContainer>
+                        <LabelContainer><StyledInputFilter onValue={setPrice} placeholderText="Ваша ціна" validate /><div>$</div></LabelContainer>
                     </Label>
                     <Label>
                         Пробіг:
-                        <LabelContainer><StyledInputFilter onValue={setMileage} placeholderText="123 000" /><span>км</span></LabelContainer>
+                        <LabelContainer><StyledInputFilter onValue={setMileage} placeholderText="123 000" validate /><span>км</span></LabelContainer>
                     </Label>
                     <Label>
                         Двигун:
-                        <LabelContainer><StyledInputFilter onValue={setCapacity} value={capacity} contextmin={0.1} contextmax={10} placeholderText="2.2" /><span>л</span></LabelContainer>
+                        <LabelContainer><StyledInputFilter onValue={setCapacity} value={capacity} contextmin={0.1} contextmax={10} placeholderText="2.2" validate /><span>л</span></LabelContainer>
                     </Label>
                     <Label>
                         Паливо:
-                        <StyledDropdownFilter onModificate={setFuel} data={selecterData ? selecterData.fuelTypes.map(item => { return { label: item, value: item, } }) : null} />
+                        <StyledDropdownFilter onModificate={setFuel} data={selecterData ? selecterData.fuelTypes.map(item => { return { label: item, value: item, } }) : null} validate />
                     </Label>
-                    <Label>
+                    <Label id='addPhoto'>
                         Рік випуску:
-                        <StyledDropdownFilter onModificate={setYear} data={createDates()} />
+                        <StyledDropdownFilter onModificate={setYear} data={createDates()} validate />
                     </Label>
                     <Label>
                         Місто:
-                        <StyledDropdownFilter onModificate={setRegion} data={selecterData ? selecterData.cities.map(item => { return { label: item, value: item, } }) : null} />
+                        <StyledDropdownFilter onModificate={setRegion} data={selecterData ? selecterData.cities.map(item => { return { label: item, value: item, } }) : null} validate />
                     </Label>
                     <Label>
                         Державний номер:
-                        <Input type="text" maxLength={8} placeholder='АА0000ВХ' value={carNumber} onChange={e => { patternHandler(e.target.value.toUpperCase(), setCarNumber, /[^0-9АВЕКМНОРСТУХІABEKMHOPCTYXZDI]/gi) }} required />
+                        <Input type="text" maxLength={8} placeholder='АА0000ВХ' value={carNumber} onChange={e => { patternHandler(e.target.value.toUpperCase(), setCarNumber, /[^0-9АВЕКМНОРСТУХІABEKMHOPCTYXZDI]/gi) }} validate />
                     </Label>
                     <Label>
                         VIN-Код:
-                        <Input type="text" maxLength={17} placeholder='Y6D1103078XXXXXXX' value={vinNumber} onChange={e => { patternHandler(e.target.value.toUpperCase(), setVinNumber, /[^a-zA-Z0-9]/gi) }} />
-                    </Label>
-                    <Label>
-                        Зоображення:
-                        <Input type="file" placeholder='' />
+                        <Input type="text" maxLength={17} placeholder='Y6D1103078XXXXXXX' value={vinNumber} onChange={e => { patternHandler(e.target.value.toUpperCase(), setVinNumber, /[^a-zA-Z0-9]/gi) }} validate />
                     </Label>
                 </SubContainer>
                 <Label>
+                    Зоображення ({images.length}/25):
+                    <PhotosLoader onPhotosChange={setImages} />
+                </Label>
+                <Label>
                     Опис:
                     <InputArea maxLength={1500} value={description} onChange={(e) => setDescription(e.target.value)} cols="10" rows="5" placeholder='Опишіть ваше авто, можете додайти цікаві деталі, наприклад комплектація авто, відчуття від його керування та інше..' />
-                    <span>Максимум 1500 символів</span>
+                    <span>Максимум {1500 - description.length} символів</span>
                 </Label>
                 <Chapter><p>2. Додаткова інформація про автомобіль (Не обов'язково)</p> <hr /></Chapter>
                 <Label>
                     Колір:
-                    <StyledDropdownFilter onModificate={setColor} data={selecterData ? selecterData.colors.map(item => { return { label: item, value: item, } }) : null} />
+                    <StyledDropdownFilter onModificate={setColor} data={selecterData ? selecterData.colors.map(item => { return { label: item.text, value: JSON.stringify(item), } }) : null} />
                 </Label>
                 <Label>
                     Тип:
@@ -135,8 +138,6 @@ export const Form = ({ onFormChanged }) => {
                     Стан:
                     <StyledDropdownFilter onModificate={setState} data={selecterData ? selecterData.state.map(item => { return { label: item, value: item, } }) : null} />
                 </Label>
-                <Controls><TermsGroup><input type="checkbox" id="terms" /><span><label htmlFor="terms">Погоджуюсь з </label><Link to={"/terms-conditions?type=createPost"} target="_blank" style={{ color: "#fff", textDecorationLine: "underline" }}>умовами використання для створення оголошення про продажу авто</Link></span></TermsGroup><button type='submit' onClick={0}>Створити</button></Controls>
-                {/* {errorMsg ? <ErrorMsg>{errorMsg}</ErrorMsg> : null} */}
             </Form_Container>
         </>
     )
@@ -172,20 +173,11 @@ const Chapter = styled.div`
     }
 `
 
-const Form_Container = styled.div`
+const Form_Container = styled.form`
     display: block;
     margin: 10px auto;
     width: 100%;
-    padding: 0 10px;
     padding-bottom: 10px;
-    user-select: none;
-    box-sizing: border-box;
-    -moz-user-select: none;
-    -webkit-user-drag: none;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    border-radius: 5px;
-    background: #cc4343;
 `
 
 const General_Label = styled.h1`
@@ -200,7 +192,7 @@ const Small_Label = styled(General_Label)`
     padding: 10px 0px;
 `
 
-const Label = styled.label`
+const Label = styled.div`
     display: flex;
     padding: 5px 0px;
     flex-direction: column;
@@ -298,74 +290,4 @@ const StyledInputFilter = styled(InputFilter)`
     ${InputFromFilter} {
 
     }
-`
-
-const Controls = styled.div`
-    font-size: 16px;
-    width: 100%;
-    margin-top: 20px;
-    margin-bottom: 12px;
-
-    button {
-        width: 100%;
-        background: #fff;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: none;
-        border-radius: 5px;
-        white-space: nowrap;
-        z-index: 100;
-        font-family: inherit;
-        font-size: inherit;
-        font-weight: 500;
-        cursor: pointer;
-        opacity: 0.9;
-        transition-property: opacity;
-        transition-duration: 200ms;
-        color: #cc4343;
-        &:hover {
-            opacity: 1;
-            transition-duration: 300ms;
-        }
-    }
-
-    .link {
-        box-shadow: 0px 1px 0px 0px rgba(0, 0, 0, 0);
-        transition-property: box-shadow;
-        transition-duration: 200ms;
-        color: #fff;
-        &:hover {
-            box-shadow: 0px 2px 0px 0px #fff;
-            transition-property: box-shadow;
-            transition-duration: 300ms;
-        }
-    }
-`
-
-const TermsGroup = styled.div`
-    display: flex;
-    margin-bottom: 10px;
-    align-items: flex-start;
-    input {
-        margin-right: 8px;
-    }
-    span {
-        display: block;
-        margin: auto;
-        width: 100%;
-        color: #fff;
-    }
-`
-
-const ErrorMsg = styled.span`
-    position: absolute;
-    width: 100%;
-    text-align: center;
-    font-weight: inherit;
-    font-size: 16px;
-    opacity: 0;
-    border-bottom: 2px solid;
-    animation: ani 0.3s forwards;
-    margin-top: 20px;
-    padding-bottom: 5px;
 `
